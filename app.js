@@ -1,6 +1,6 @@
 import inquirer from "inquirer";
-import { get, save, obtenerGastoGuardado } from "./readWritePromises.js";
-import { promptGastos, promptObtenerGastos } from "./promptGastos.js";
+import { get, save, obtenerGastoGuardado, obtenerMontoGastado } from "./readWritePromises.js";
+import { promptGastos, promptObtenerGastos, promptObtenerMonto } from "./promptGastos.js";
 
 const menu = async () =>{
     try {
@@ -16,6 +16,7 @@ const menu = async () =>{
                         {value: 1, name: "Agregar nuevo gasto"},
                         {value: 2, name: "Consultar todos los gastos"},
                         {value: 3, name: "Obtener un gasto específico"},
+                        {value: 4, name: "Obtener gastos mayores a un monto"},
                         {value: 99, name: "Salir \n"},
                     ]
                 },
@@ -31,7 +32,11 @@ const menu = async () =>{
                     break;
                 case 3:
                     await
-                        getGastoEspecifico();
+                        getNombreGasto();
+                    break;
+                case 4:
+                    await
+                        getMontoGasto();
                     break;
                 case 99:
                         promptContinuo = false;
@@ -67,7 +72,7 @@ const getAllGastos = async () =>{
     }
 }
 
-const getGastoEspecifico = async () => {
+const getNombreGasto = async () => {
     try {
         const nombreGasto = await promptObtenerGastos();
         const gastoEncontrado = await obtenerGastoGuardado(nombreGasto);
@@ -76,5 +81,17 @@ const getGastoEspecifico = async () => {
         console.log(error);
     }
 }
+
+const getMontoGasto = async () => {
+    try {
+        const montoGasto = await promptObtenerMonto();
+        const gastoEncontrado = await obtenerMontoGastado(montoGasto);
+        console.log(gastoEncontrado);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 
 menu();

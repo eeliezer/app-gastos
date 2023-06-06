@@ -25,11 +25,21 @@ export const save = (file, newData) => {
     })
 }
 
-export const obtenerGastoGuardado = async (montoGasto) =>{
+export const obtenerGastoGuardado = async (nombreGasto) =>{
     const gastos = await get("./gastosGuardados.json")
-/*     let objetoSuelto = [...gastos]
-    console.log(objetoSuelto[1]);
-    const gastoObtenido = gastos.filter(gastos=>gastos.gasto_dinero >= montoGasto.buscar_gasto) */
-    const gastoObtenido = gastos.filter(gasto=>gasto.nombre_gasto === montoGasto.buscar_gasto)
+    const gastoObtenido = gastos.filter(gasto=>gasto.nombre_gasto === nombreGasto.buscar_gasto)
     return gastoObtenido[0];
+}
+
+export const obtenerMontoGastado = async (montoGasto) =>{
+    const gastos = await get("./gastosGuardados.json");
+    const montoIngresado = montoGasto.monto_gasto
+    // Una función que verifica si el precio es mayor que un valor dado
+    function precioMayorQue(valor) {
+        return function(elemento) {
+        return elemento.gasto_dinero > valor;
+        }
+    }
+    // Retornar el resultado
+    return gastos.filter(precioMayorQue(Number(montoIngresado)));
 }
